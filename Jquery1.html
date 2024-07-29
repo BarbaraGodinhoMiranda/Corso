@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <script>
+    window.onload = gestoreLoad;
+    
+    function gestoreLoad(){
+
+        function getRandomColor() {
+            let letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        let bgColor = getRandomColor();
+            let textColor = getRandomColor();
+            document.body.style.backgroundColor = bgColor;
+            document.body.style.color = textColor;
+
+        /*     
+Prendiamo l'elemento con id container e gli aggiungiamo un paragrafo
+con del testo
+        */
+$('#container').html('<p> Accedi </p>');
+     /*     
+Selezioniamo il bottone con id myButton e gli assegnamo una funzione
+all'evento onclick (l'alert)
+        */ 
+
+    $('#myButton').click(function() {
+    alert('Hai cliccato il pulsante!');
+});
+
+let ok = false;
+
+
+
+$('#btn').click(function(){
+    if (ok == false){
+    $('#nascondi').hide();
+    ok = true; }
+    else if (ok){
+        
+        $('#nascondi').show();
+        ok = false;
+    }
+});
+
+
+}
+
+
+
+
+
+
+
+    
+    </script>
+</head>
+<body>
+ <div id = "container">
+
+ </div> 
+
+    Inserisci username: <input type = "text" id = "username">  <br><br>
+    Inserisci password: <input type = "text" id = "passw">  <br><br>
+ <button id = "myButton">Accedi</button>
+
+ 
+ <button id = "btn">darkmode</button>
+</body>
+</html>

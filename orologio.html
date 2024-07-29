@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Negozio di Orologi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        img.logo {
+            height: 90px; 
+            margin-right: 10px;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+        img.watch-img {
+            height: 300px; 
+            width: 100%; 
+            object-fit: cover; 
+        }
+        .card-img-top {
+            height: 250px; 
+            object-fit: contain; 
+        }
+        #carrello-container {
+            margin-top: 30px;
+        }
+        #carrello {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        #totale-carrello {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: right;
+        }
+        .list-group-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .list-group-item img {
+            height: 50px;
+            margin-right: 10px;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        footer {
+            margin-top: 50px;
+            padding: 10px 0;
+            background-color: #f8f9fa;
+            text-align: center;
+        }
+    </style>
+    <script>
+        class Articolo {
+            constructor(nome, marca, prezzo, qnt, img) {
+                this.nome = nome;
+                this.marca = marca;
+                this.prezzo = prezzo;
+                this.qnt = qnt;
+                this.img = img;
+            }
+        }
+ 
+        let listaArticoli = [];
+        let carrello = [];
+ 
+        window.onload = gestoreLoad;
+ 
+        function gestoreLoad() {
+            listaArticoli = [
+                new Articolo("Orient Kamasu", "Orient", 240, 30, "https://m.media-amazon.com/images/I/61ZB0JH1vVL._AC_UY900_.jpg"),
+                new Articolo("Hamilton Khaki Field Mechanical", "Hamilton", 575, 20, "https://www.hamiltonwatch.com/media/catalog/product/cache/210d940f9ad047e0498136a433b50fbd/h/6/h69529933.png"),
+                new Articolo("Glycine Combat Sub", "Glycine", 545, 15, "https://www.glycinestore.eu/files/product/956-536b.jpg?1699371396"),
+                new Articolo("Vostok Amphibia 170", "Vostok", 149, 25, "https://buyvostok.com/cdn/shop/files/vostok-amphibian-classic-170963-with-auto-self-winding-watches-447.jpg?v=1694787380"),
+                new Articolo("Seiko Turtle Great Blue", "Seiko", 649, 18, "https://www.gioielleriabortone.com/pub/media/catalog/product/cache/6994d8763142f8ead65db09e765edd9d/2/9/29120-5cd-orologio-seiko-prospex-padi-king-turtle-the-great-blue.jpg"),
+                new Articolo("Bulova Oceanographer", "Bulova", 579, 23, "https://www.corsovinci.com/cdn/shop/products/96B322_1_20_2_500x500.progressive.jpg?v=1692367947")
+            ];
+            visualizza();
+function visualizza() {
+            let container = document.getElementById("articoli");
+            listaArticoli.forEach((articolo, index) => {
+                let col = document.createElement("div");
+                col.className = "col";
+                col.innerHTML = `
+                    <div class="card h-100">
+                        <img src="${articolo.img}" class="card-img-top" alt="${articolo.nome}">
+                        <div class="card-body">
+                            <h5 class="card-title">${articolo.nome}</h5>
+                            <p class="card-text">Marchio: ${articolo.marca}</p>
+                            <p class="card-text">Prezzo: €${articolo.prezzo}</p>
+                            <p class="card-text">Disponibilità: ${articolo.qnt}</p>
+                            <input type="number" id="qnt-${index}" class="form-control mb-2" min="1" max="${articolo.qnt}" value="1">
+                            <button class="btn btn-primary" onclick="aggiungiAlCarrello(${index})">Aggiungi al carrello</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(col);
+            });
+        }}
+ 
+        function aggiungiAlCarrello(index) {
+            let qnt = parseInt(document.getElementById(`qnt-${index}`).value);
+            let articolo = listaArticoli[index];
+            let carrelloArticolo = carrello.find(a => a.nome === articolo.nome);
+            if (carrelloArticolo) {
+                carrelloArticolo.qnt += qnt;
+            } else {
+                carrello.push({
+                    nome: articolo.nome,
+                    marca: articolo.marca,
+                    prezzo: articolo.prezzo,
+                    qnt: qnt,
+                    img: articolo.img
+                });
+            }
+            mostraPopup("Articolo aggiunto al carrello!");
+            aggiornaCarrello();
+        }
+        let lista=new Array();
+        function aggiornaCarrello() {
+            let carrelloContainer = document.getElementById("carrello");
+            carrelloContainer.innerHTML = "";
+            let totale = 0;
+ 
+            carrello.forEach((articolo, index) => {
+                totale += articolo.prezzo * articolo.qnt;
+ 
+                let item = document.createElement("li");
+                item.className = "list-group-item d-flex justify-content-between align-items-center";
+                item.innerHTML = `
+                    <div class="d-flex align-items-center">
+                        <img src="${articolo.img}" alt="${articolo.nome}">
+                        <div>
+                            <strong>${articolo.nome}</strong><br>
+                            €${articolo.prezzo} x ${articolo.qnt} = €${articolo.prezzo * articolo.qnt}
+                        </div>
+                    </div>
+                    <button class="btn btn-danger btn-sm" onclick="rimuoviDalCarrello(${index})">Rimuovi</button>
+                `;
+                carrelloContainer.appendChild(item);
+            });
+            let totaleItem = document.createElement("li");
+            totaleItem.className = "list-group-item active text-end";
+            totaleItem.innerHTML = `Totale: €${totale}`;
+            document.getElementById("totale-carrello").innerHTML = `Totale: €${totale}`;
+            carrelloContainer.appendChild(totaleItem);
+        }
+ 
+        function rimuoviDalCarrello(index) {
+            carrello.splice(index, 1);
+            aggiornaCarrello();
+        }
+ 
+        function mostraPopup(messaggio) {
+            let popup = document.createElement("div");
+            popup.className = "popup";
+            popup.innerHTML = messaggio;
+            document.body.appendChild(popup);
+            popup.style.display = "block";
+            setTimeout(() => {
+                popup.style.display = "none";
+                document.body.removeChild(popup);
+            }, 2000);
+ 
+        }
+        function ordina(){
+             for (let i = 0; i < carrello.length; i++) {  alert(carrello[i].nome); }
+        }
+    </script>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="d-flex align-items-center mb-4">
+            <img src="https://t4.ftcdn.net/jpg/05/61/71/57/360_F_561715747_NmW4tJZX27nZNlbYgddCfGxAgvzpltJn.jpg" class="logo" alt="Logo Negozio di Orologi">
+            <h1 class="mb-0">Negozio di Orologi</h1>
+        </div>
+        <div class="row row-cols-1 row-cols-md-3 g-4" id="articoli">
+        </div>
+        <div id="carrello-container">
+            <h2 class="mt-5">Carrello</h2>
+            <ul class="list-group mb-3" id="carrello">
+            </ul>
+            <div id="totale-carrello"></div>
+            <button class="btn btn-success mt-3" onclick="ordina()">Ordina</button>
+        </div>
+    </div>
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <p>Tutti i diritti riservati &copy; 2024</p>
+                </div>
+                <div class="col">
+                    <button type="button" class="btn btn-outline-primary btn-sm">Facebook</button>
+                    <button type="button" class="btn btn-outline-info btn-sm">Twitter</button>
+                    <button type="button" class="btn btn-outline-danger btn-sm">Instagram</button>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,162 @@
+class song {
+    constructor(titolo, autore, genere, anno, img){
+        this.titolo = titolo;
+        this.autore = autore;
+        this.genere = genere;
+        this. anno = anno;
+        this.img = img;
+    }
+}
+
+window.onload = gestoreLoad;
+
+
+function gestoreLoad() {
+
+
+
+  function remove(nodo){
+
+      var nodo = nodo;
+
+      while (nodo.firstChild) {
+
+      nodo.removeChild(nodo.firstChild);
+      }
+    }
+
+
+  // let list=new Array();
+
+
+    /*let s2= new song( "Shameless" , "Camila-Cabello" , "pop punk" , "2017", "album romance.jpg");
+    let s3= new song( "Royalty" , "Egzod & Maestro Chives ft. Neoni" , "Dance/elettronica" , "2021", "Royalty.jpg");
+    let s4= new song( "Blinding Lights" , "The Weeknd" , "	Contemporary R&B Alternative R&B Pop" , "2020", "The weeknd.jpg");
+    let s5= new song( "Paprika" , "Ghali" , "Hip-hop/Rap" , "2024", "Paprika.jpg");
+
+    list.push(s2);
+    list.push(s3);
+    list.push(s4);
+    list.push(s5);
+    salvaDati();*/
+    list = JSON.parse(localStorage.getItem('canzoni1'));
+
+
+
+
+    let btn1= document.getElementById("btn1");
+    let btn2= document.getElementById("btn2");
+    let btn3= document.getElementById("btn3");
+    btn1.onclick = Inserisci;
+    btn2.onclick = Cerca;
+    btn3.onclick = Modifica; 
+
+
+    let nodo = document.getElementById("result");
+
+
+
+
+
+
+
+    function popolaSelect(){
+     let nodoselect = document.getElementById("nome1");
+     remove(nodoselect);
+     console.log(list);
+     for (let i=0; i<list.length; i++){
+      let nodoOption= document.createElement("option");
+      nodoOption.textContent = list[i].titolo;
+
+      nodoOption.value= list[i].titolo;
+      nodoselect.appendChild(nodoOption);
+     }
+    }
+   popolaSelect();
+
+
+
+
+
+
+
+    function Inserisci(){
+        let nome = document.getElementById("nome").value;
+        let autore = document.getElementById("autore").value;
+        let genere = document.getElementById("genere").value;
+        let anno = document.getElementById("anno").value;
+        let img = document.getElementById("img").value;
+        let s1 = new song (nome, autore, genere, anno, img);
+        list.push(s1);
+        alert("Canzone aggiunta con successo");
+        popolaSelect();
+        salvaDati();           }
+
+        function salvaDati(){
+
+          localStorage.setItem('canzoni1', JSON.stringify(list));
+
+                            }
+
+
+
+
+
+
+    function Cerca(){
+      var nodo = document.getElementById("result");
+        remove(nodo);
+
+        for (let i = 0; i < list.length; i++){
+
+     let nodoCard = document.createElement("div");
+     nodoCard.className = "card";
+     nodoCard.style.width = "18rem";
+     let nodoImg = document.createElement("img");
+     nodoImg.src = list[i].img;
+     nodoImg.className = "card-img-top";
+     nodoCard.appendChild(nodoImg);
+     let nodoCardBody = document.createElement("div");
+     nodoCardBody.className = "card-body";
+     nodoCard.appendChild(nodoCardBody);
+     let nodoTitolo = document.createElement("h5");
+     nodoTitolo.className = "card-title";
+     nodoTitolo.textContent = list[i].titolo;
+     nodoCardBody.appendChild(nodoTitolo);
+     let nodoText = document.createElement("p");
+     nodoText.className = "card-text";
+
+     nodoText.textContent = list[i].autore + " , " + list[i].genere + " , " + list[i].anno;
+     nodoCardBody.appendChild(nodoText);
+     nodo.appendChild(nodoCard);
+                                            }
+
+                    }
+
+  function Modifica() {
+      ok=0;
+      let nome= document.getElementById("nome1").value;
+      let img1= document.getElementById("img1").value;
+
+      for(let i=0 ; i<list.length; i++) {
+          if(list[i].titolo==nome){
+              list[i].img=img1;
+              ok=1
+          }}
+
+      if(ok==0){
+          alert("Canzone non trovata");
+      }
+      if(ok>0){
+          alert("Canzone trovata, immagine cambiata con successo!");
+      }
+
+
+
+
+
+
+
+  }
+
+}

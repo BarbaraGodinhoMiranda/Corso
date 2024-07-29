@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature del mese</title>
+    <script>
+
+         window.onload = gestoreLoad;
+ 
+       function gestoreLoad() {
+            remove();
+             let btn = document.getElementById("btn");
+             let btn1 = document.getElementById("btn1");
+             let btn2 = document.getElementById("btn2");
+ 
+             btn.onclick = add;
+             btn1.onclick = media;
+             btn2.onclick = mostra;
+            // creiamo un array come variabile globale
+           let listaTemp = [];
+            function add(){
+ 
+            let temp = document.getElementById("temp").value;
+            listaTemp.push(parseInt(temp));
+            console.log(listaTemp);
+ 
+            }
+ 
+            function media(){
+                remove();
+               let media = 0;
+               for (let i = 0; i < listaTemp.length; i++) {
+                   media += listaTemp[i];
+               }
+               console.log(media);
+ 
+               media = media/listaTemp.length;
+ 
+               let nodo = document.getElementById("result");
+               nodo.innerHTML = "<p>La media delle temperature del mese " + media + " </p>"; 
+               if (media<15) {
+                   nodo.innerHTML = '<p> Fa freddo! </p><img src="https://itinerariodiviaggio.com/wp-content/uploads/2023/10/winter-landscape-2995987_1920-1.jpg" alt="inverno">'
+               }
+               if (media>=15 && media <= 28) {
+                   nodo.innerHTML = '<p> Si sta bene! </p><img src="https://editorialtelevisa.brightspotcdn.com/dims4/default/761e4f1/2147483647/strip/true/crop/900x507+0+47/resize/1000x563!/format/webp/quality/90/?url=https%3A%2F%2Fk2-prod-editorial-televisa.s3.us-east-1.amazonaws.com%2Fbrightspot%2Fwp-content%2Fuploads%2F2019%2F04%2F900paisaje-primavera.jpg" alt="primavera autunno">'
+               }
+               if (media>28) {
+                   nodo.innerHTML = '<p> Fa caldo! </p><img src="https://cloud.rtl.it/RTLFM/News/Article/1000x1000/estate-2019-tutte-le-mete-preferite-dagli-italiani-per-le-vacanze-u2lih.png" alt="estate">'
+               }
+ 
+            }
+ 
+ 
+ 
+            function mostra(){
+               remove();
+              let nodo = document.getElementById("result1");
+ 
+              for (let i =0; i < listaTemp.length; i++){
+ 
+               let nuovoNodo = document.createElement("li");
+               nuovoNodo.textContent = listaTemp[i];
+               nodo.appendChild(nuovoNodo);
+ 
+              }
+ 
+ 
+ 
+            }
+            function remove(){
+ 
+               var nodo = document.getElementById("result1");
+               while (nodo.firstChild) {
+               nodo.removeChild(nodo.firstChild);
+       }
+ 
+   }
+ 
+   }
+    </script>
+</head>
+<body>
+    <h1>Registro delle temperature</h1>
+    <label for=""> Inserisci la temperatura </label>
+    <input type="number" id="temp">
+      <br><br>
+    <button id = "btn">Inserisci</button>
+     <hr><hr>
+    <button id = "btn2">Mostra temperature</button>
+    <ul id = "result1"></ul>
+    <hr>
+    <hr>
+    <button id = "btn1">Calcola media</button>
+    <div id = "result">
+ 
+    </div>
+</body>
+</html>

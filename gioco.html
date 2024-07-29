@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+    window.onload = gestoreLoad;
+ 
+    function gestoreLoad() {
+ 
+        let btn = document.getElementById("btn");
+        btn.onclick = gioca;
+        let credito = 9;
+        let nodo = document.getElementById("result");
+        function remove(){
+ 
+    var nodo = document.getElementById("result");
+ 
+    while (nodo.firstChild) {
+ 
+        nodo.removeChild(nodo.firstChild);
+    }
+ 
+}
+ 
+        function gioca(){
+if (credito > 3){
+ 
+ 
+let numRan = Math.floor(Math.random() * 4) + 1;
+let num = document.getElementById("num").value;
+let seme = "";
+if (numRan == 1){
+    seme = "cuori";
+}
+if (numRan == 2){
+    seme = "quadri";
+}
+if (numRan == 3){
+    seme = "fiori";
+}
+if (numRan == 4){
+    seme = "picche";
+}
+ 
+if (numRan == num){
+    credito += 5;
+    remove();
+    let nuovoNodo = document.createElement("h3");
+    nuovoNodo.textContent = "Hai Vinto!!! E' uscito " + seme;
+    let nuovoNodo1 = document.createElement("h3");
+    nuovoNodo1.textContent = "Il tuo credito ora è " + credito;
+    nodo.appendChild(nuovoNodo);
+    nodo.appendChild(nuovoNodo1);
+ 
+ 
+}
+else {
+    credito -= 3;
+    remove();
+    let nuovoNodo = document.createElement("h3");
+    nuovoNodo.textContent = "Hai perso!!! E' uscito " + seme;
+    let nuovoNodo1 = document.createElement("h3");
+    nuovoNodo1.textContent = "Il tuo credito ora è " + credito;
+    nodo.appendChild(nuovoNodo);
+    nodo.appendChild(nuovoNodo1);
+}
+ 
+ 
+        }
+    else {
+        remove();
+        let nodoSelect = document.getElementById("num");
+        nodoSelect.style.display = "none";
+        let btn1 = document.getElementById("btn");
+        btn1.style.display = "none";
+        let nuovoNodo = document.createElement("h3");
+        nuovoNodo.textContent = "Credito esaurito";
+        nodo.appendChild(nuovoNodo);
+ 
+    }
+    }
+ 
+    }
+    </script>
+</head>
+<body>
+  <h1>Indovina seme talentform</h1> 
+  <select id = "num">
+ <option value = "1">Cuori</option>
+ <option value = "2">Quadri</option>
+ <option value = "3">Fiori</option>
+ <option value = "4">Picche</option>
+ 
+  </select><br><br>
+  <button id = "btn">Gioca</button> 
+  <hr><hr>
+  <div id = "result"></div>
+</body>
+</html>
